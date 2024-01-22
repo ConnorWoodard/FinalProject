@@ -1,0 +1,47 @@
+﻿@model TipCalculationModel
+@{
+    ViewBag.Title = "Tip Calculator";
+}
+<h1 style="color: darkblue; margin-bottom: 20px;" class="fw-bold">Tip Calculator</h1>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form method="post" asp-action="Index">
+    <div style="margin-bottom: 10px; display: flex; align-items: center;">
+        <label class="form-label" asp-for="MealCost" style="margin-bottom: 5px; margin-right: 50px;">Cost of meal:</label>
+        <input asp-for="MealCost" style="margin-bottom: 5px; width: 150px;" />
+    </div>
+    <div>
+        <label class="form-label" asp-for="SmallTipAmount" style="margin-bottom: 5px; margin-right: 80px;">15% tip:</label>
+        @if (Model != null && Model.SmallTipAmount != null && Model.MealCost.HasValue && Model.MealCost.Value > 0)
+        {
+            <span>@Model.SmallTipAmount.Value.ToString("C")</span>
+        }
+        else
+        {
+            <span></span>
+        }
+    </div>
+    <div>
+        <label class="form-label" asp-for="MediumTipAmount" style="margin-bottom: 5px; margin-right: 80px;">18% tip:</label>
+        @if (Model != null && Model.MediumTipAmount != null && Model.MealCost.HasValue && Model.MealCost.Value > 0)
+        {
+            <span>@Model.MediumTipAmount.Value.ToString("C")</span>
+        }
+        else
+        {
+            <span></span>
+        }
+    </div>
+    <div>
+        <label class="form-label" asp-for="LargeTipAmount" style="margin-bottom: 10px; margin-right: 80px;">20% tip:</label>
+        @if (Model != null && Model.LargeTipAmount != null && Model.MealCost.HasValue && Model.MealCost.Value > 0)
+        {
+            <span>@Model.LargeTipAmount.Value.ToString("C")</span>
+        }
+        else
+        {
+            <span></span>
+        }
+    </div>
+    <button type="submit" style="margin-right: 10px">Calculate</button>
+    <a asp-action="Index">Clear</a>
+</form>

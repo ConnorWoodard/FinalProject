@@ -1,0 +1,49 @@
+﻿@model PriceQuotationModel
+@{
+    ViewBag.Title = "Price Quotation";
+}
+<form method="post" asp-action="Index" class="needs-validation">
+    <header class="bg-success text-white text-center py-4" style="margin-bottom: 5px">
+        <h1 class="fw-bold">
+            Price Quotation
+            <i class="fas fa-money-bill-wave ms-2"></i>
+        </h1>
+    </header>
+
+    <div class="row">
+        <div style="margin-bottom: 10px; display: flex; align-items: center;" class="col-md-3">
+            <label class="form-label" asp-for="SubTotal" style="margin-bottom: 5px;">SubTotal:</label>
+        </div>
+        <div style="margin-bottom: 10px;" class="col-md-3">
+            <input asp-for="SubTotal" style="margin-bottom: 5px;" class="form-control" />
+            <div class="invalid-feedback">
+                <span asp-validation-for="SubTotal"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div style="margin-bottom: 10px; display: flex; align-items: center;" class="col-md-3">
+            <label class="form-label" asp-for="DiscountPercentage" style="margin-bottom: 5px;">Discount Percent:</label>
+        </div>
+        <div style="margin-bottom: 10px; display: flex; align-items: center;" class="col-md-3">
+            <input asp-for="DiscountPercentage" style="margin-bottom: 5px;" class="form-control" />
+            <div class="invalid-feedback">
+                <span asp-validation-for="DiscountPercentage"></span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <label class="form-label" asp-for="DiscountAmount" style="margin-bottom: 5px; margin-right: 40px;">Discount Amount:</label>
+        <span>@(Model?.SubTotal.HasValue == true ? Model.DiscountAmount?.ToString("C") : "$0.00")</span>
+    </div>
+
+    <div>
+        <label class="form-label" asp-for="Total" style="margin-bottom: 10px; margin-right: 130px;">Total:</label>
+        <span>@(Model?.SubTotal.GetValueOrDefault() > 0 ? Model.Total?.ToString("C") : "$0.00")</span>
+    </div>
+
+    <button type="submit" class="btn btn-success" style="margin-right: 10px">Calculate</button>
+    <a asp-action="Index" class="btn btn-success">Clear</a>
+</form>
