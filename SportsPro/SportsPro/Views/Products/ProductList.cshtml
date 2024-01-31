@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Product List";
+}
+
+<div class="container-fluid">
+    <h1 class="display-5">Product Manager</h1>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th class="fw-semibold">Code</th>
+            <th class="fw-semibold">Name</th>
+            <th class="fw-semibold">Price</th>
+            <th class="fw-semibold">Release Date</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductCode</td>
+                <td>@product.Name</td>
+                <td>@product.YearlyPrice.ToString("C")</td>
+                <td>@product.ReleaseDate.ToString("MM/dd/yyyy")</td>
+                <td>
+                    <a asp-action="EditProduct" asp-route-id="@product.ProductId" asp-route-slug="@product.Slug" class="btn btn-outline-primary btn-dark" asp-controller="Products">Edit</a>
+                    <a asp-action="DeleteProduct" asp-route-id="@product.ProductId" asp-route-slug="@product.Slug" class="btn btn-outline-danger btn-dark" asp-controller="Products">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+                <a asp-controller="Products" asp-action="AddProduct" class="btn btn-outline-secondary btn-dark">Add New Product</a>
+            </td>
+        </tr>
+    </tfoot>
+</table>

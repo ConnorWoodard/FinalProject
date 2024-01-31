@@ -1,0 +1,51 @@
+﻿@model Technicians
+@{
+    ViewData["Title"] = "Edit Technician";
+}
+
+<h1>@ViewBag.Action</h1>
+
+<form asp-action="EditTechnician" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label">Phone</label>
+        <input asp-for="Phone" class="form-control" id="formattedPhone" />
+    </div>
+    <input type="hidden" asp-for="TechnicianId" />
+    <button type="submit" class="btn btn-outline-primary btn-dark">Save</button>
+    <a asp-controller="Technicians" asp-action="TechnicianList" class="btn btn-outline-secondary btn-dark">Cancel</a>
+    <script>
+        document.getElementById('formattedPhone').addEventListener('input', function (e) {
+            var input = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+            var formattedInput = formatPhoneNumber(input);
+            e.target.value = formattedInput.substr(0, 13); // Limit to 10 characters
+        });
+
+        function formatPhoneNumber(phoneNumber) {
+            var formattedNumber = '';
+
+            if (phoneNumber.length >= 4) {
+                formattedNumber += phoneNumber.substr(0, 3) + '-';
+                phoneNumber = phoneNumber.substr(3);
+            }
+
+            if (phoneNumber.length >= 4) {
+                formattedNumber += phoneNumber.substr(0, 3) + '-';
+                phoneNumber = phoneNumber.substr(3);
+            }
+
+            formattedNumber += phoneNumber;
+
+            return formattedNumber;
+        }
+    </script>
+</form>
+

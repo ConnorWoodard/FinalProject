@@ -2,6 +2,14 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    /* Add custom styles to override link styles for main links */
+    .main-link {
+        color: black !important;
+        text-decoration: none !important;
+    }
+</style>
+
 <div class="container-fluid">
     <h1 class="display-5">SportsPro Technical Support</h1>
     <p>Sports management software for the sports enthusiast</p>
@@ -13,23 +21,23 @@
 
 <div class="container-fluid">
     <div class="section-label">
-        <h2>Manage Products</h2>
+        <h2><a class="main-link" asp-controller="Products" asp-action="ProductList">Manage Products</a></h2>
     </div>
 
     <div class="section-label">
-        <h2>Manage Technicians</h2>
+        <h2><a class="main-link" asp-controller="Technicians" asp-action="TechnicianList">Manage Technicians</a></h2>
     </div>
 
     <div class="section-label">
-        <h2>Manage Customers</h2>
+        <h2><a class="main-link" asp-area="" asp-controller="" asp-action="Customers">Manage Customers</a></h2>
     </div>
 
     <div class="section-label">
-        <h2>Manage Incidents</h2>
+        <h2><a class="main-link" asp-area="" asp-controller="" asp-action="Incidents">Manage Incidents</a></h2>
     </div>
 
     <div class="section-label" style="margin-bottom: 10px">
-        <h2>Manage Registrations</h2>
+        <h2><a class="main-link" asp-area="" asp-controller="" asp-action="Registrations">Manage Registrations</a></h2>
     </div>
 </div>
 
@@ -39,9 +47,11 @@
 
 <div class="container-fluid">
     <div class="section-label">
-        <h2>Update Incidents</h2>
+        <h2><a class="main-link" asp-area="" asp-controller="" asp-action="UpdateIncidents">Update Incidents</a></h2>
     </div>
 </div>
+
+
 
 <style>
     .section-label {
