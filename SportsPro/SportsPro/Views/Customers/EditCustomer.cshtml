@@ -1,0 +1,74 @@
+﻿@model Customers
+@{
+    ViewData["Title"] = "Edit Customer";
+}
+
+<h1>@ViewBag.Action</h1>
+<form asp-action="EditCustomer" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label">First Name</label>
+        <input asp-for="FirstName" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label">Last Name</label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label">Address</label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="City" class="form-label">City</label>
+        <input asp-for="City" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="State" class="form-label">State</label>
+        <input asp-for="State" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="PostalCode" class="form-label">Postal Code</label>
+        <input asp-for="PostalCode" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CountryId" class="form-label">Country</label>
+        <select asp-for="CountryId" class="form-control">
+            <option value="">-- Select Country --</option>
+            @foreach (var country in ViewBag.Country)
+            {
+                <option value="@country.CountryId">@country.Name</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label">Phone</label>
+        <input asp-for="Phone" class="form-control" id="formattedPhone" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <input type="hidden" asp-for="CustomerId" />
+    <button type="submit" class="btn btn-outline-primary btn-dark">Save</button>
+    <a asp-controller="Customers" asp-action="CustomerList" class="btn btn-outline-secondary btn-dark">Cancel</a>
+    <script>
+        document.getElementById('formattedPhone').addEventListener('input', function (e) {
+            var input = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+            var formattedInput = formatPhoneNumber(input);
+            e.target.value = formattedInput.substr(0, 13); // Limit to 10 characters
+        });
+        function formatPhoneNumber(phoneNumber) {
+            var formattedNumber = '';
+            if (phoneNumber.length >= 4) {
+                formattedNumber += phoneNumber.substr(0, 3) + '-';
+                phoneNumber = phoneNumber.substr(3);
+            }
+            if (phoneNumber.length >= 4) {
+                formattedNumber += phoneNumber.substr(0, 3) + '-';
+                phoneNumber = phoneNumber.substr(3);
+            }
+            formattedNumber += phoneNumber;
+            return formattedNumber;
+        }
+    </script>
+</form>

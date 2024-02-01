@@ -9,6 +9,10 @@ namespace SportsPro.Models
 
         public DbSet<Technicians> Technicians { get; set; } = null!;
 
+        public DbSet<Customers> Customers { get; set; } = null!;
+
+        public DbSet<Country> Country { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Products>().HasData(
@@ -30,6 +34,27 @@ namespace SportsPro.Models
                 new Technicians { TechnicianId = 3, Name = "Drew Douglas", Email = "ddouglas@gmai.com", Phone = "800-555-0423" },
                 new Technicians { TechnicianId = 4, Name = "Gunter Wendt", Email = "gunter@sportsprosoftware.com", Phone = "800-555-0453" },
                 new Technicians { TechnicianId = 5, Name = "Jim Wilson", Email = "jwilson23@sportsprosoftware.com", Phone = "800-555-0449" }
+                );
+
+            modelBuilder.Entity<Country>().HasData(
+                new Country { CountryId = 1, Name = "USA" },
+                new Country { CountryId = 2, Name = "Canada" },
+                new Country { CountryId = 3, Name = "England" },
+                new Country { CountryId = 4, Name = "France" },
+                new Country { CountryId = 5, Name = "Germany" },
+                new Country { CountryId = 6, Name = "Italy" },
+                new Country { CountryId = 7, Name = "Spain" },
+                new Country { CountryId = 8, Name = "Mexico" },
+                new Country { CountryId = 9, Name = "Brazil" },
+                new Country { CountryId = 10, Name = "Argentina" }
+                );
+
+            modelBuilder.Entity<Customers>().HasData(
+                new Customers { CustomerId = 1, FirstName = "John", LastName = "Doe", Address = "123 Elm St", City = "Toronto", State = "ON", CountryId = 2, PostalCode = "M1M1M1", Email = "johndoe@sportsprosoftware.com", Phone = "800-565-0443" },
+                new Customers { CustomerId = 2, FirstName = "Jane", LastName = "Smith", Address = "456 Oak St", City = "Vancouver", State = "BC", CountryId = 2, PostalCode = "V5V 5V5", Email = "smith523@sportsprosoftware.com", Phone = "810-565-0443" },
+                new Customers { CustomerId = 3, FirstName = "Mike", LastName = "Jones", Address = "789 Pine St", City = "Montreal", State = "QC", CountryId = 2, PostalCode = "H3H 3H3", Email = "quebeclover12@sportsprosoftware.com", Phone = "820-565-0443" },
+                new Customers { CustomerId = 4, FirstName = "Kaitlyn", LastName = "Anthoni", Address = "1010 Birch St", City = "San Francisco", State = "CA", CountryId = 1, PostalCode = "94101", Email = "kanthoni@gmail.com", Phone = "830-565-0578" },
+                new Customers { CustomerId = 5, FirstName = "Karl", LastName = "Bronsom", Address = "1111 Cedar St", City = "Los Angeles", State = "CA", CountryId = 1, PostalCode = "90001", Email = "", Phone = "" }
                 );
         }
     }

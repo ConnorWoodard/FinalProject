@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Customer List";
+}
+
+<div class="container-fluid">
+    <h1 class="display-5">Customer Manager</h1>
+</div>
+
+<div class="container-fluid">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="fw-semibold">Name</th>
+                <th class="fw-semibold">Email</th>
+                <th class="fw-semibold">City</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>@customer.FirstName @customer.LastName</td>
+                    <td>@customer.Email</td>
+                    <td>@customer.City</td>
+                    <td style="width: 1%">
+                        <a asp-action="EditCustomer" asp-route-slug="@customer.Slug" asp-route-id="@customer.CustomerId" class="btn btn-outline-primary btn-dark" asp-controller="Customers">Edit</a>
+                    </td>
+                    <td style="width: 1%">
+                        <a asp-action="DeleteCustomer" asp-route-id="@customer.CustomerId" asp-route-slug="@customer.Slug" class="btn btn-outline-danger btn-dark" asp-controller="Customers">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div style="margin-left: 1%">
+    <a asp-controller="Customers" asp-action="AddCustomer" class="btn btn-outline-secondary btn-dark">Add New Customer</a>
+</div>
