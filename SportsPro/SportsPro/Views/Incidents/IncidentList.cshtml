@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Incident List";
+}
+
+<div class="container-fluid">
+    <h1 class="display-5">Incident Manager</h1>
+</div>
+
+<div class="container-fluid">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td class="fw-semibold">Title</td>
+                <td class="fw-semibold">Customer</td>
+                <td class="fw-semibold">Product</td>
+                <td class="fw-semibold">Date Opened</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var incident in Model)
+            {
+                <tr>
+                    <td>@incident.Title</td>
+                    <td>@incident.Customer.FirstName @incident.Customer.LastName</td>
+                    <td>@incident.Product.Name</td>
+                    <td>@incident.DateOpened.ToString("MM/dd/yyyy")</td>
+                    <td style="width: 1%">
+                        <a asp-action="EditIncident" asp-route-id="@incident.IncidentId" asp-route-slug="@incident.Slug" class="btn btn-outline-primary btn-dark" asp-controller="Incidents">Edit</a>
+                    </td>
+                    <td style="width: 1%">
+                        <a asp-action="DeleteIncident" asp-route-id="@incident.IncidentId" asp-route-slug="@incident.Slug" class="btn btn-outline-danger btn-dark" asp-controller="Incidents">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div style="margin-left: 1%">
+    <a asp-controller="Incidents" asp-action="AddIncident" class="btn btn-outline-secondary btn-dark">Add New Incident</a>
+</div>

@@ -13,6 +13,8 @@ namespace SportsPro.Models
 
         public DbSet<Country> Country { get; set; } = null!;
 
+        public DbSet<Incidents> Incidents { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Products>().HasData(
@@ -55,6 +57,13 @@ namespace SportsPro.Models
                 new Customers { CustomerId = 3, FirstName = "Mike", LastName = "Jones", Address = "789 Pine St", City = "Montreal", State = "QC", CountryId = 2, PostalCode = "H3H 3H3", Email = "quebeclover12@sportsprosoftware.com", Phone = "820-565-0443" },
                 new Customers { CustomerId = 4, FirstName = "Kaitlyn", LastName = "Anthoni", Address = "1010 Birch St", City = "San Francisco", State = "CA", CountryId = 1, PostalCode = "94101", Email = "kanthoni@gmail.com", Phone = "830-565-0578" },
                 new Customers { CustomerId = 5, FirstName = "Karl", LastName = "Bronsom", Address = "1111 Cedar St", City = "Los Angeles", State = "CA", CountryId = 1, PostalCode = "90001", Email = "", Phone = "" }
+                );
+
+            modelBuilder.Entity<Incidents>().HasData(
+                new Incidents { IncidentId = 1, CustomerId = 1, ProductId = 1, Title = "Could not install", Description = "Received error code 123 when trying to install", TechnicianId = 1, DateOpened = DateTime.Parse("2021-01-01"), DateClosed = null },
+                new Incidents { IncidentId = 2, CustomerId = 2, ProductId = 2, Title = "Could not install", Description = "Received error code 123 when trying to install", TechnicianId = 2, DateOpened = DateTime.Parse("2021-01-01"), DateClosed = DateTime.Now },
+                new Incidents { IncidentId = 3, CustomerId = 5, ProductId = 8, Title = "Error launching program", Description = "Program fails with error code 510, unable to open database.", TechnicianId = 3, DateOpened = DateTime.Parse("2022-09-10"), DateClosed = DateTime.Now },
+                new Incidents { IncidentId = 4, CustomerId = 4, ProductId = 7, Title = "Error launching program", Description = "Program fails with error code 510, unable to open database.", TechnicianId = 4, DateOpened = DateTime.Parse("2022-09-10"), DateClosed = null }
                 );
         }
     }
