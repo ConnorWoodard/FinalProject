@@ -14,12 +14,15 @@ namespace SportsPro.Controllers
             Context = ctx;
         }
 
+        //Route is /Products
+        [Route("Products")]
         public IActionResult ProductList()
         {
             var products = Context.Products.OrderBy(p => p.Name).ToList();
             return View(products);
         }
 
+        [Route("Products/AddProduct")]
         public IActionResult AddProduct()
         {
             ViewBag.Action = "Add Product";
@@ -33,6 +36,7 @@ namespace SportsPro.Controllers
         }
 
         [HttpGet]
+        [Route("Product/Edit/{id}/{Slug}")]
         public IActionResult EditProduct(int id)
         {
             ViewBag.Action = "Edit Product";
@@ -42,7 +46,7 @@ namespace SportsPro.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditProduct(Products product)
+        public IActionResult EditProduct2(Products product)
         {
             if (ModelState.IsValid)
             {

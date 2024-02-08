@@ -30,9 +30,7 @@ namespace SportsPro.Models
         [StringLength(500, ErrorMessage = "Description must be 500 characters or less")]
         public string Description { get; set; } = null!;
 
-        [Required(ErrorMessage = "Please select a Technician")]
-        [Range(1, double.MaxValue, ErrorMessage = "Please select a technician")]
-        public int? TechnicianId { get; set; }
+        public int TechnicianId { get; set; } = -1;
 
         [ValidateNever]
         public Technicians Technician { get; set; } = null!; //Navigation property

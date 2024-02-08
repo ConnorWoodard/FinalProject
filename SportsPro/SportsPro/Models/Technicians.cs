@@ -10,19 +10,16 @@ namespace SportsPro.Models
 
         [Required(ErrorMessage = "Please enter a Name")]
         [StringLength(50, ErrorMessage = "Name must be 50 characters or less")]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = null!;
 
-        [Required(ErrorMessage = "Please enter an Email")]
-        [StringLength(50, ErrorMessage = "Email must be 50 characters or less")]
-        [EmailAddress(ErrorMessage = "Please enter a valid email")]
-        public string Email { get; set; } = string.Empty;
+        [ValidateNever]
+        public string? Email { get; set; } = null!;
 
-        [Required(ErrorMessage = "Please enter a Phone Number")]
+        [ValidateNever]
         [StringLength(12, ErrorMessage = "Phone number must be 10 characters", MinimumLength = 0)]
-        [Phone(ErrorMessage = "Please enter a valid phone number")]
-        public string Phone { get; set; } = string.Empty;
+        public string? Phone { get; set; } = string.Empty;
 
-        //Read-only property for the slug
+        // Read-only property for the slug
         public string Slug => Name?.Replace(' ', '-').ToLower() + '-' + TechnicianId.ToString();
     }
 }

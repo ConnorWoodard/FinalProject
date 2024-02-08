@@ -14,6 +14,7 @@ namespace SportsPro.Controllers
             Context = ctx;
         }
 
+        [Route("Customers")]
         public IActionResult CustomerList()
         {
             var customers = Context.Customers.Include(c => c.Country).OrderBy(c => c.FirstName).ToList();

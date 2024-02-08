@@ -14,6 +14,7 @@ namespace SportsPro.Controllers
             Context = ctx;
         }
 
+        [Route("Technicians")]
         public IActionResult TechnicianList()
         {
             var technicians = Context.Technicians.Where(t => t.TechnicianId != -1).OrderBy(t => t.Name).ToList();

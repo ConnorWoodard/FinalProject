@@ -7,7 +7,7 @@
 <form asp-action="EditIncident" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
-        <label asp-for="CustomerId" class="form-label">Customer</label>"
+        <label asp-for="CustomerId" class="form-label">Customer</label>
         <select asp-for="CustomerId" class="form-control">
             <option value="">-- Select Customer --</option>
             @foreach (var customer in ViewBag.Customers)
@@ -37,7 +37,7 @@
     <div class="mb-3">
         <label asp-for="TechnicianId" class="form-label">Technician</label>
         <select asp-for="TechnicianId" class="form-control">
-            <option value="">-- Select Technician --</option>
+            <option value="-1">Not assigned</option>
             @foreach (var technician in ViewBag.Technicians)
             {
                 <option value="@technician.TechnicianId">@technician.Name</option>

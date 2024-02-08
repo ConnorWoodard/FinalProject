@@ -15,6 +15,7 @@ namespace SportsPro.Controllers
             Context = ctx;
         }
 
+        [Route("Incidents")]
         public IActionResult IncidentList()
         {
             var incidents = Context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).OrderBy(i => i.DateOpened).ToList();
@@ -26,7 +27,7 @@ namespace SportsPro.Controllers
             ViewBag.Action = "Add Incident";
             ViewBag.Customers = Context.Customers.OrderBy(c => c.FirstName).ToList();
             ViewBag.Products = Context.Products.OrderBy(p => p.Name).ToList();
-            ViewBag.Technicians = Context.Technicians.Where(t => t.TechnicianId != -1).OrderBy(t => t.Name).ToList();
+            ViewBag.Technicians = Context.Technicians.OrderBy(t => t.Name).ToList();
 
             var incident = new Incidents()
             {
