@@ -42,6 +42,6 @@ namespace SportsPro.Models
         public DateTime? DateClosed { get; set; }
 
         //Read-only property for the slug
-        public string Slug => Title?.Replace(' ', '-').ToLower() + '-' + IncidentId.ToString();
+        public string? Slug => Title?.Replace(' ', '-').ToLower();
     }
 }

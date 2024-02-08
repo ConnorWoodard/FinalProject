@@ -48,6 +48,6 @@ namespace SportsPro.Models
         public string? Phone { get; set; } = null!;
 
         //Read-only property for the slug
-        public string Slug => FirstName?.Replace(' ', '-').ToLower() + '-' + CustomerId.ToString();     
+        public string? Slug => FirstName?.Replace(' ', '-').ToLower() + '_' + LastName?.Replace(' ', '-').ToLower();     
     }
 }

@@ -20,6 +20,6 @@ namespace SportsPro.Models
         public string? Phone { get; set; } = string.Empty;
 
         // Read-only property for the slug
-        public string Slug => Name?.Replace(' ', '-').ToLower() + '-' + TechnicianId.ToString();
+        public string? Slug => Name?.Replace(' ', '-').ToLower();
     }
 }

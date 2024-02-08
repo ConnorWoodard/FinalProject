@@ -25,6 +25,6 @@ namespace SportsPro.Models
         public DateTime ReleaseDate { get; set; } = DateTime.Now;
 
         //Read-only property for the slug
-        public string Slug => Name?.Replace(' ', '-').ToLower() + '-' + ProductId.ToString();
+        public string? Slug => Name?.Replace(' ', '-').ToLower();
     }
 }
