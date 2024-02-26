@@ -5,7 +5,12 @@
 <div class="container-fluid">
     <h1 class="display-5">Product Manager</h1>
 </div>
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
 <div class="container-fluid">
     <table class="table table-bordered table-striped table-responsive border border-secondary">
         <thead>

@@ -1,4 +1,4 @@
-﻿@model Incidents
+﻿@model AddEditIncidentViewModel
 @{
     ViewData["Title"] = "Edit Incident";
 }
@@ -7,52 +7,54 @@
 <form asp-action="EditIncident" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
-        <label asp-for="CustomerId" class="form-label">Customer</label>
-        <select asp-for="CustomerId" class="form-control">
+        <label asp-for="CurrentIncident.CustomerId" class="form-label">Customer</label>
+        <select asp-for="CurrentIncident.CustomerId" class="form-control">
             <option value="">-- Select Customer --</option>
-            @foreach (var customer in ViewBag.Customers)
+            @foreach (var customer in Model.Customers)
             {
                 <option value="@customer.CustomerId">@customer.FirstName @customer.LastName</option>
             }
         </select>
     </div>
     <div class="mb-3">
-        <label asp-for="ProductId" class="form-label">Product</label>
-        <select asp-for="ProductId" class="form-control">
+        <label asp-for="CurrentIncident.ProductId" class="form-label">Product</label>
+        <select asp-for="CurrentIncident.ProductId" class="form-control">
             <option value="">-- Select Product --</option>
-            @foreach (var product in ViewBag.Products)
+            @foreach (var product in Model.Products)
             {
                 <option value="@product.ProductId">@product.Name</option>
             }
         </select>
     </div>
     <div class="mb-3">
-        <label asp-for="Title" class="form-label">Title</label>
-        <input asp-for="Title" class="form-control" />
+        <label asp-for="CurrentIncident.Title" class="form-label">Title</label>
+        <input asp-for="CurrentIncident.Title" class="form-control" />
     </div>
     <div class="mb-3">
-        <label asp-for="Description" class="form-label">Description</label>
-        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <label asp-for="CurrentIncident.Description" class="form-label">Description</label>
+        <textarea asp-for="CurrentIncident.Description" class="form-control" rows="3"></textarea>
     </div>
     <div class="mb-3">
-        <label asp-for="TechnicianId" class="form-label">Technician</label>
-        <select asp-for="TechnicianId" class="form-control">
+        <label asp-for="CurrentIncident.TechnicianId" class="form-label">Technician</label>
+        <select asp-for="CurrentIncident.TechnicianId" class="form-control">
             <option value="-1">Not assigned</option>
-            @foreach (var technician in ViewBag.Technicians)
+            @foreach (var technician in Model.Technicians)
             {
                 <option value="@technician.TechnicianId">@technician.Name</option>
             }
         </select>
     </div>
     <div class="mb-3">
-        <label asp-for="DateOpened" class="form-label">Date Opened</label>
-        <input asp-for="DateOpened" class="form-control" />
+        <label asp-for="CurrentIncident.DateOpened" class="form-label">Date Opened</label>
+        <input asp-for="CurrentIncident.DateOpened" class="form-control" />
     </div>
     <div class="mb-3">
-        <label asp-for="DateClosed" class="form-label">Date Closed</label>
-        <input asp-for="DateClosed" class="form-control" />
+        <label asp-for="CurrentIncident.DateClosed" class="form-label">Date Closed</label>
+        <input asp-for="CurrentIncident.DateClosed" class="form-control" />
     </div>
-    <input type="hidden" asp-for="IncidentId" />
+    <input type="hidden" asp-for="CurrentIncident.IncidentId" />
+    <input type="hidden" asp-for="Operation" />
+    <input type="hidden" asp-for="DisplayFilter"  value="@Model.DisplayFilter"/>
     <button type="submit" class="btn btn-outline-primary btn-dark">Save</button>
     <a asp-controller="Incidents" asp-action="IncidentList" class="btn btn-outline-secondary btn-dark">Cancel</a>
 </form>

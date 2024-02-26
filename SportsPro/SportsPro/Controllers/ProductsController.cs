@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
+using System;
 using System.Diagnostics;
 
 namespace SportsPro.Controllers
 {
     public class ProductsController : Controller
     {
-        private SportsContext Context { get; set; }      
+        private SportsContext Context { get; set; }
 
         public ProductsController(SportsContext ctx)
         {
             Context = ctx;
         }
 
-        //Route is /Products
         [Route("Products")]
         public IActionResult ProductList()
         {
@@ -53,10 +53,12 @@ namespace SportsPro.Controllers
                 if (product.ProductId == 0)
                 {
                     Context.Products.Add(product);
+                    TempData["SuccessMessage"] = "Product added successfully!";
                 }
                 else
                 {
                     Context.Products.Update(product);
+                    TempData["SuccessMessage"] = "Product updated successfully!";
                 }
                 Context.SaveChanges();
                 return RedirectToAction("ProductList", "Products");
@@ -80,6 +82,7 @@ namespace SportsPro.Controllers
         {
             Context.Products.Remove(product);
             Context.SaveChanges();
+            TempData["SuccessMessage"] = "Product deleted successfully!";
             return RedirectToAction("ProductList");
         }
 
