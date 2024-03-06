@@ -14,6 +14,10 @@ namespace SportsPro.Models
 
         [Required(ErrorMessage = "Please enter a Last Name")]
         [StringLength(50, ErrorMessage = "Last Name must be 50 characters or less")]
+
+        [Display(Name = "Full Name")]
+        public string FullName => $"{FirstName} {LastName}";
+
         public string LastName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Please enter an Address")]

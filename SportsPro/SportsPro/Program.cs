@@ -15,18 +15,25 @@ builder.Services.AddRouting(options =>
     options.AppendTrailingSlash = true;
 });
 
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
+
 
 app.MapControllerRoute(
     name: "default",

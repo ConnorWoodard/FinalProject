@@ -20,28 +20,25 @@ namespace SportsPro.Controllers
         {
             var incidents = Context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).OrderBy(i => i.DateOpened).ToList();
 
-            //Apply filtering logic based on the filter parameter
-            if (!string.IsNullOrEmpty(filter))
+            // Apply filtering logic based on the filter parameter
+            switch (filter?.ToLower())
             {
-                switch (filter.ToLower())
-                {
-                    case "unassigned":
-                        incidents = incidents.Where(i => i.TechnicianId == 0).ToList();
-                        break;
-                    case "open":
-                        incidents = incidents.Where(i => i.DateClosed == null).ToList();
-                        break;
-                        // Add more cases as needed
-                }
+                case "unassigned":
+                    incidents = incidents.Where(i => i.TechnicianId == -1).ToList();
+                    break;
+                case "open":
+                    incidents = incidents.Where(i => i.DateClosed == null).ToList();
+                    break;
+                    // Add more cases as needed
             }
 
-            //Order the incidents by date opened
+            // Order the incidents by date opened
             var filteredIncidents = incidents.OrderBy(i => i.DateOpened).ToList();
 
             var incidentsViewModel = new IncidentManagerViewModel
             {
                 incidents = filteredIncidents,
-                DisplayFilter = filter
+                DisplayFilter = filter ?? "All" // Default to "All" if filter is null
             };
 
             return View(incidentsViewModel);
@@ -49,16 +46,6 @@ namespace SportsPro.Controllers
 
         public IActionResult AddIncident()
         {
-            /*            ViewBag.Action = "Add Incident";
-                        ViewBag.Customers = Context.Customers.OrderBy(c => c.FirstName).ToList();
-                        ViewBag.Products = Context.Products.OrderBy(p => p.Name).ToList();
-                        ViewBag.Technicians = Context.Technicians.OrderBy(t => t.Name).ToList();
-
-                        var incident = new Incidents()
-                        {
-                            DateOpened = DateTime.Now
-                        };
-            */
             var viewModel = new AddEditIncidentViewModel
             {
                 Customers = Context.Customers.OrderBy(c => c.FirstName).ToList(),
@@ -70,6 +57,11 @@ namespace SportsPro.Controllers
                 },
                 Operation = "Add"
             };
+
+            ViewBag.Customers = viewModel.Customers;
+            ViewBag.Products = viewModel.Products;
+            ViewBag.Technicians = viewModel.Technicians;
+
             return View("EditIncident", viewModel);
         }
 
@@ -91,6 +83,9 @@ namespace SportsPro.Controllers
                 Operation = "Edit",
                 DisplayFilter = "All"
             };
+            ViewBag.Customers = viewModel.Customers;
+            ViewBag.Products = viewModel.Products;
+            ViewBag.Technicians = viewModel.Technicians;
             return View(viewModel);
         }
 

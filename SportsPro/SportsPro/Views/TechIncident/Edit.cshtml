@@ -1,0 +1,70 @@
+﻿@model TechIncidentViewModel
+@{
+    ViewBag.Title = "Edit Incident";
+}
+
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}
+
+<h1>@ViewBag.Title</h1>
+
+<form asp-action="Edit" method="post">
+    <div class="row mb-1">
+        <label class="col-form-label col-md-3">Technician: </label>
+        <div class="col">
+            <label>@Model.Technician.Name</label>
+        </div>
+    </div>
+
+    <div class="row mb-1">
+        <label class="col-form-label col-md-3">Customer: </label>
+        <div class="col">
+            <label>@Model.Incident.Customer.FullName</label>
+        </div>
+    </div>
+
+    <div class="row mb-1">
+        <label class="col-form-label col-md-3">Product: </label>
+        <div class="col">
+            <label>@Model.Incident.Product.Name</label>
+        </div>
+    </div>
+
+    <div class="row mb-1">
+        <label class="col-form-label col-md-3">
+            <div class="col">
+                <label>@Model.Incident.Title</label>
+            </div>
+        </label>
+    </div>
+
+    <div class="row mb-1">
+        <label class="col-form-label col-md-3">Date Opened: </label>
+        <div class="col">
+            <label>@Model.Incident.DateOpened.ToShortDateString()</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Incident.Description" class="form-label">Description</label>
+        <textarea asp-for="Incident.Description" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="row mb-1">
+        <label asp-for="Incident.DateClosed" class="col-form-label col-md-3">Date Closed: </label>
+        <div class="col">
+            <input asp-for="Incident.DateClosed" class="form-control" rows="3"/>
+        </div>
+    </div>
+
+    <input type="hidden" asp-for="Incident.IncidentId" />
+
+    <div class="row">
+        <div class="col">
+            <button type="submit" class="btn btn-outline-primary">Save</button>
+            <a asp-action="List" asp-route-id="@Model.Technician.TechnicianId" class="btn btn-outline-secondary">Cancel</a>"
+        </div>
+    </div>
+</form>

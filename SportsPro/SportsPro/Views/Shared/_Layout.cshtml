@@ -11,35 +11,35 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">SportsPro</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SportsPro</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "Privacy" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Products" asp-action="ProductList">Products</a>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "ProductList" ? "active" : "")" asp-area="" asp-controller="Products" asp-action="ProductList">Products</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Technicians" asp-action="TechnicianList">Technicians</a>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "TechnicianList" ? "active" : "")" asp-area="" asp-controller="Technicians" asp-action="TechnicianList">Technicians</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Customers" asp-action="CustomerList">Customers</a>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "CustomerList" ? "active" : "")" asp-area="" asp-controller="Customers" asp-action="CustomerList">Customers</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Incidents" asp-action="IncidentList">Incidents</a>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "IncidentList" ? "active" : "")" asp-area="" asp-controller="Incidents" asp-action="IncidentList">Incidents</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="Registrations">Registrations</a>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "Registrations" ? "active" : "")" asp-area="" asp-controller="" asp-action="Registrations">Registrations</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav justify-content-end">

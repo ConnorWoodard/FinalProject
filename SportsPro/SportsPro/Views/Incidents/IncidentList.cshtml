@@ -8,6 +8,19 @@
 </div>
 
 <div class="container-fluid">
+    <ul class="nav nav-pills mb-3">
+        @foreach (var filter in Model.AvailableFilters)
+        {
+            <li class="nav-item">
+                <a class="nav-link @(filter.ToLower() == Model.DisplayFilter.ToLower() ? "active" : "")"
+                   asp-action="IncidentList"
+                   asp-route-filter="@filter">@filter</a>
+            </li>
+        }
+    </ul>
+</div>
+
+<div class="container-fluid">
     <table class="table table-bordered table-striped table-responsive border border-secondary">
         <thead>
             <tr>
