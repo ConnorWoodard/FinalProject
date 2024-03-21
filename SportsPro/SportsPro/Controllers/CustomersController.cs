@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
 using System.Diagnostics;
@@ -24,7 +25,7 @@ namespace SportsPro.Controllers
         public IActionResult AddCustomer()
         {
             ViewBag.Action = "Add Customer";
-            ViewBag.Country = Context.Country.OrderBy(c => c.Name).ToList();
+            ViewBag.CountrySelectList = new SelectList(Context.Country.OrderBy(c => c.Name), "CountryId", "Name");
 
             var customer = new Customers();
             return View("EditCustomer", customer);
@@ -34,7 +35,7 @@ namespace SportsPro.Controllers
         public IActionResult EditCustomer(int id)
         {
             ViewBag.Action = "Edit Customer";
-            ViewBag.Country = Context.Country.OrderBy(c => c.Name).ToList();
+            ViewBag.CountrySelectList = new SelectList(Context.Country.OrderBy(c => c.Name), "CountryId", "Name");
 
             var customer = Context.Customers.Find(id);
             return View("EditCustomer", customer);

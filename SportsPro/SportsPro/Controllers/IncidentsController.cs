@@ -15,7 +15,7 @@ namespace SportsPro.Controllers
             Context = ctx;
         }
 
-        [Route("Incidents")]
+        [Route("Incidents/{filter?}")]
         public IActionResult IncidentList(string filter)
         {
             var incidents = Context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).OrderBy(i => i.DateOpened).ToList();
