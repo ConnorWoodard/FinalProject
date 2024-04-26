@@ -1,0 +1,83 @@
+﻿@using SportsPro.Models.DomainModels
+@model List<Products>
+@{
+    ViewBag.Title = "Select Customer";
+}
+<h1>Select a Customer</h1>
+<form asp-controller="Registration" asp-action="ChangeCustomer" method="post" id="customerForm">
+    <div>
+        <label class="form-label">Select a Customer</label>
+        <select class="form-control" id="customerSelect" name="customerId">
+            <option value="">Select A Customer</option>
+            @foreach (Customers customer in ViewBag.Customers)
+            {
+                if (ViewBag.SelectedCustomer != null && ViewBag.SelectedCustomer == customer.CustomerId)
+                {
+                    <option value="@customer.CustomerId" selected>@customer.FullName</option>
+                }
+                else
+                {
+                    <option value="@customer.CustomerId">@customer.FullName</option>
+                }
+            }
+        </select>
+    </div>
+    <script>
+        var selectElement = document.getElementById('customerSelect');
+        selectElement.addEventListener('change', function () {
+            var formElement = document.getElementById('customerForm');
+            formElement.submit();
+        })
+    </script>
+</form>
+@if (ViewBag.SelectedCustomer != null)
+{
+    <h3>Registered Products</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Registered Products</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in ViewBag.ProductsRegistered)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>
+                        @*<a asp-controller="Registration" asp-action="RemoveRegistration" asp-route-id="@product.ProductId" class="btn btn-primary">Remove Product</a>*@
+                        <form asp-controller="Registration" asp-action="RemoveRegistration" method="post">
+                            <input type="hidden" name="customerId" value="@ViewBag.SelectedCustomer" />
+                            <input type="hidden" name="productId" value="@product.ProductId" />
+                            <button type="submit" class="btn btn-danger">Remove Product</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (ViewBag.UnregisteredProducts.Count > 0)
+    {
+        <h3>Unregistered Products</h3>
+        <form asp-controller="Registration" asp-action="RegisterNewProduct" method="post">
+            <input type="hidden" name="customerId" value="@ViewBag.SelectedCustomer" />
+            <div class="form-group">
+                <label for="productId">Select Product to Register:</label>
+                <select class="form-control" id="productId" name="productId">
+                    <option value="">Select a Product</option>
+                    @foreach (var product in ViewBag.UnregisteredProducts)
+                    {
+                        <option value="@product.ProductId">@product.Name</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Register Product</button>
+        </form>
+    }
+    else
+    {
+        <p>No unregistered products available.</p>
+    }
+}

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using SportsPro.Models.DomainModels;
 using System.ComponentModel.DataAnnotations;
 
-namespace SportsPro.Models
+namespace SportsPro.Models.DomainModels
 {
     public class Incidents
     {

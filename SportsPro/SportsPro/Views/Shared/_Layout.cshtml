@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> signInManager
+@using SportsPro.Models
+@{
+    var currentUser = await signInManager.UserManager.GetUserAsync(User);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,31 +28,49 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(Nav.Active(ViewContext?.RouteData.Values["Action"]?.ToString(), "Index"))" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "Privacy" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link @(Nav.Active(ViewContext?.RouteData.Values["Action"]?.ToString(), "Privacy"))" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "ProductList" ? "active" : "")" asp-area="" asp-controller="Products" asp-action="ProductList">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "TechnicianList" ? "active" : "")" asp-area="" asp-controller="Technicians" asp-action="TechnicianList">Technicians</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "CustomerList" ? "active" : "")" asp-area="" asp-controller="Customers" asp-action="CustomerList">Customers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "IncidentList" ? "active" : "")" asp-area="" asp-controller="Incidents" asp-action="IncidentList">Incidents</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext?.RouteData.Values["Action"]?.ToString() == "Registrations" ? "active" : "")" asp-area="" asp-controller="" asp-action="Registrations">Registrations</a>
-                        </li>
+                        
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(Nav.Active(ViewContext?.RouteData.Values["Action"]?.ToString(), "ProductList"))" asp-area="" asp-controller="Products" asp-action="ProductList">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(Nav.Active(ViewContext?.RouteData.Values["Action"]?.ToString(), "TechnicianList"))" asp-area="" asp-controller="Technicians" asp-action="TechnicianList">Technicians</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(Nav.Active(ViewContext?.RouteData.Values["Action"]?.ToString(), "CustomerList"))" asp-area="" asp-controller="Customers" asp-action="CustomerList">Customers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(Nav.Active(ViewContext?.RouteData.Values["Action"]?.ToString(), "IncidentList"))" asp-area="" asp-controller="Incidents" asp-action="IncidentList">Incidents</a>
+                            </li>
+                        }
+                        @if (!User.Identity.IsAuthenticated || currentUser == null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(Nav.Active(ViewContext?.RouteData.Values["Action"]?.ToString(), "Register"))" asp-area="" asp-controller="Registration" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(Nav.Active(ViewContext?.RouteData.Values["Action"]?.ToString(), "Login"))" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav justify-content-end">
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item active">
+                                <span class="nav-link text-white">Welcome, @currentUser.UserName!</span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="form-inline">
+                                    <button type="submit" class="nav-link btn btn-link text-white">Log out</button>
+                                </form>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -54,6 +78,10 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if (TempData.Keys.Contains("message"))
+            {
+                <h4 class="bg-info text-center text-white p-2">@TempData["message"]</h4>
+            }
             @RenderBody()
         </main>
     </div>

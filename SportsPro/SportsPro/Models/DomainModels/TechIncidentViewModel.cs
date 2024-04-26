@@ -1,4 +1,6 @@
-﻿namespace SportsPro.Models
+﻿using SportsPro.Models.DomainModels;
+
+namespace SportsPro.Models
 {
     public class TechIncidentViewModel
     {

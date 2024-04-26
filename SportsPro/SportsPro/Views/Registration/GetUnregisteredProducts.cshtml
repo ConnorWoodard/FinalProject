@@ -1,0 +1,20 @@
+﻿@using SportsPro.Models.DomainModels
+@model IEnumerable<Products>
+@{
+    ViewBag.Title = "Select Product";
+}
+<h1>Select a Product</h1>
+<form asp-controller="Registration" asp-action="RegisterProduct" method="post">
+    <div>
+        <label class="form-label">Select a Product</label>
+        <select class="form-control" id="productSelect" name="productId">
+            <option value="">Select A Product</option>
+            @foreach (var product in Model)
+            {
+                <option value="@product.ProductId">@product.Name</option>
+            }
+        </select>
+        <input type="hidden" name="customerId" value="@ViewBag.SelectedCustomer" />
+    </div>
+    <button type="submit" class="btn btn-success">Register Product</button>
+</form>

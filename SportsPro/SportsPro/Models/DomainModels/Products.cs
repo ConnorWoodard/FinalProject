@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace SportsPro.Models
+namespace SportsPro.Models.DomainModels
 {
     public class Products
     {
@@ -23,6 +24,13 @@ namespace SportsPro.Models
         //The release date is a prefilled box that reads the current date and time, and is not required to be filled out by the user
         [DataType(DataType.DateTime)]
         public DateTime ReleaseDate { get; set; } = DateTime.Now;
+
+        public Products()
+        {
+            Customer = new List<Customers>();
+        }
+
+        public List<Customers> Customer { get; set; }
 
         //Read-only property for the slug
         public string? Slug => Name?.Replace(' ', '-').ToLower();

@@ -1,4 +1,7 @@
-﻿namespace SportsPro.Models
+﻿using SportsPro.Models.DomainModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace SportsPro.Models.DomainModels
 {
     public class AddEditIncidentViewModel
     {

@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SportsPro.Models;
+using SportsPro.Models.DataLayer;
+using SportsPro.Models.DomainModels;
 
 namespace SportsPro.Controllers
 {
     public class ValidationController : Controller
     {
-        private readonly SportsContext _context;
+        private Repository<Customers> Customerss { get; set; }
 
         public ValidationController(SportsContext context)
         {
-            _context = context;
+            Customerss = new Repository<Customers>(context);
         }
+
 
         public IActionResult Index()
         {
@@ -22,7 +24,11 @@ namespace SportsPro.Controllers
         {
             if (!string.IsNullOrWhiteSpace(email))
             {
-                var existingCustomer = _context.Customers.FirstOrDefault(c => c.Email == email);
+                var existingCustomer = Customerss.Get(new QueryOptions<Customers>
+                {
+                    Where = c => c.Email == email
+                });
+
                 if (existingCustomer != null && existingCustomer.CustomerId != customerId)
                 {
                     return Json($"Email '{email}' is already in use.");
@@ -32,6 +38,7 @@ namespace SportsPro.Controllers
             return Json(true);
         }
 
+        //validate country method
         public IActionResult ValidateCountry(int? countryId)
         {
             if (countryId.HasValue && countryId > 0)
@@ -40,6 +47,7 @@ namespace SportsPro.Controllers
             }
             return Json("Please select a country.");
         }
+
 
         public IActionResult ValidateFirstName(string firstName)
         {

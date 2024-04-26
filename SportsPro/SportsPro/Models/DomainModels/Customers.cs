@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using SportsPro.Models.DomainModels;
 using System.ComponentModel.DataAnnotations;
 
-namespace SportsPro.Models
+namespace SportsPro.Models.DomainModels
 {
     public class Customers
     {
@@ -55,6 +56,13 @@ namespace SportsPro.Models
         [RegularExpression(@"^\(?\d{3}\)?-? *\d{3}-? *-?\d{4}$", ErrorMessage = "Phone number must be in the format (999) 999-9999")]
         [StringLength(13, ErrorMessage = "Phone number must be 10 characters", MinimumLength = 0)]
         public string? Phone { get; set; } = null!;
+
+        public Customers()
+        {
+            Product = new List<Products>();
+        }
+
+        public List<Products> Product { get; set; }
 
         //Read-only property for the slug
         public string? Slug => FirstName?.Replace(' ', '-').ToLower() + '_' + LastName?.Replace(' ', '-').ToLower();     

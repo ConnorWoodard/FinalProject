@@ -1,30 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SportsPro.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using SportsPro.Models.DataLayer;
+using SportsPro.Models.DomainModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SportsPro.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TechniciansController : Controller
     {
-        private SportsContext Context { get; set; }
+        private Repository<Technicians> Technicianss { get; set; }
 
         public TechniciansController(SportsContext ctx)
         {
-            Context = ctx;
+            Technicianss = new Repository<Technicians>(ctx);
         }
 
         [Route("Technicians")]
         public IActionResult TechnicianList()
         {
-            var technicians = Context.Technicians.Where(t => t.TechnicianId != -1).OrderBy(t => t.Name).ToList();
+            var technicians = Technicianss.List(new QueryOptions<Technicians>
+            {
+                OrderBy = t => t.Name
+            });
             return View(technicians);
         }
 
         public IActionResult AddTechnician()
         {
             ViewBag.Action = "Add Technician";
-
             var technician = new Technicians();
             return View("EditTechnician", technician);
         }
@@ -34,7 +39,7 @@ namespace SportsPro.Controllers
         {
             ViewBag.Action = "Edit Technician";
 
-            var technician = Context.Technicians.Find(id);
+            var technician = Technicianss.Get(id);
             return View(technician);
         }
 
@@ -45,13 +50,13 @@ namespace SportsPro.Controllers
             {
                 if (technician.TechnicianId == 0)
                 {
-                    Context.Technicians.Add(technician);
+                    Technicianss.Insert(technician);
                 }
                 else
                 {
-                    Context.Technicians.Update(technician);
+                    Technicianss.Update(technician);
                 }
-                Context.SaveChanges();
+                Technicianss.Save();
                 return RedirectToAction("TechnicianList", "Technicians");
             }
             else
@@ -64,16 +69,16 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult DeleteTechnician(int id)
         {
-            var technician = Context.Technicians.Find(id);
+            var technician = Technicianss.Get(id);
             return View(technician);
         }
 
         [HttpPost]
         public IActionResult DeleteTechnician(Technicians technician)
         {
-            Context.Technicians.Remove(technician);
-            Context.SaveChanges();
-            return RedirectToAction("TechnicianList");
+            Technicianss.Delete(technician);
+            Technicianss.Save();
+            return RedirectToAction("TechnicianList", "Technicians");
         }
 
         public IActionResult Index()

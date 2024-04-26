@@ -1,31 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SportsPro.Models;
+using SportsPro.Models.DataLayer;
+using SportsPro.Models.DomainModels;
+using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace SportsPro.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CustomersController : Controller
     {
-        private SportsContext Context { get; set; }
-
+        private Repository<Customers> customerss { get; set; }
+        private Repository<Country> countrys { get; set; }
         public CustomersController(SportsContext ctx)
         {
-            Context = ctx;
+            customerss = new Repository<Customers>(ctx);
+            countrys = new Repository<Country>(ctx);
         }
 
         [Route("Customers")]
         public IActionResult CustomerList()
         {
-            var customers = Context.Customers.Include(c => c.Country).OrderBy(c => c.FirstName).ToList();
+            var customers = customerss.List(new QueryOptions<Customers>
+            {
+                OrderBy = c => c.FirstName
+            });
             return View(customers);
         }
 
         public IActionResult AddCustomer()
         {
             ViewBag.Action = "Add Customer";
-            ViewBag.CountrySelectList = new SelectList(Context.Country.OrderBy(c => c.Name), "CountryId", "Name");
+            ViewBag.CountrySelectList = new SelectList(countrys.List(new QueryOptions<Country> { OrderBy = c => c.Name }), "CountryId", "Name");
 
             var customer = new Customers();
             return View("EditCustomer", customer);
@@ -35,9 +44,9 @@ namespace SportsPro.Controllers
         public IActionResult EditCustomer(int id)
         {
             ViewBag.Action = "Edit Customer";
-            ViewBag.CountrySelectList = new SelectList(Context.Country.OrderBy(c => c.Name), "CountryId", "Name");
+            ViewBag.CountrySelectList = new SelectList(countrys.List(new QueryOptions<Country> { OrderBy = c => c.Name }), "CountryId", "Name");
 
-            var customer = Context.Customers.Find(id);
+            var customer = customerss.Get(id);
             return View("EditCustomer", customer);
         }
 
@@ -48,19 +57,19 @@ namespace SportsPro.Controllers
             {
                 if (customer.CustomerId == 0)
                 {
-                    Context.Customers.Add(customer);
+                    customerss.Insert(customer);
                 }
                 else
                 {
-                    Context.Customers.Update(customer);
+                    customerss.Update(customer);
                 }
-                Context.SaveChanges();
+                customerss.Save();
                 return RedirectToAction("CustomerList", "Customers");
             }
             else
             {
                 ViewBag.Action = (customer.CustomerId == 0) ? "Add Customer" : "Edit Customer";
-                ViewBag.Country = Context.Country.OrderBy(c => c.Name).ToList();
+                ViewBag.CountrySelectList = new SelectList(countrys.List(new QueryOptions<Country> { OrderBy = c => c.Name }), "CountryId", "Name");
                 return View(customer);
             }
         }
@@ -68,15 +77,15 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult DeleteCustomer(int id)
         {
-            var customer = Context.Customers.Find(id);
+            var customer = customerss.Get(id);
             return View(customer);
         }
 
         [HttpPost]
         public IActionResult DeleteCustomer(Customers customer)
         {
-            Context.Customers.Remove(customer);
-            Context.SaveChanges();
+            customerss.Delete(customer);
+            customerss.Save();
             return RedirectToAction("CustomerList", "Customers");
         }
 

@@ -1,26 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using SportsPro.Models;
+using SportsPro.Models.DataLayer;
+using SportsPro.Models.DomainModels;
 using System.Diagnostics;
 using System.Globalization;
 
 namespace SportsPro.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class IncidentsController : Controller
     {
-        private SportsContext Context { get; set; }
+        private Repository<Incidents> incidentss { get; set; }
+        private Repository<Customers> customerss { get; set; }
+        private Repository<Products> productss { get; set; }
+        private Repository<Technicians> technicianss { get; set; }
 
         public IncidentsController(SportsContext ctx)
         {
-            Context = ctx;
+            incidentss = new Repository<Incidents>(ctx);
+            customerss = new Repository<Customers>(ctx);
+            productss = new Repository<Products>(ctx);
+            technicianss = new Repository<Technicians>(ctx);
         }
 
         [Route("Incidents/{filter?}")]
         public IActionResult IncidentList(string filter)
         {
-            var incidents = Context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).OrderBy(i => i.DateOpened).ToList();
+            var incidents = incidentss.List(new QueryOptions<Incidents>
+            {
+                Includes = "Customer,Product,Technician",
+                OrderBy = i => i.DateOpened
+            });
 
-            // Apply filtering logic based on the filter parameter
             switch (filter?.ToLower())
             {
                 case "unassigned":
@@ -29,28 +42,36 @@ namespace SportsPro.Controllers
                 case "open":
                     incidents = incidents.Where(i => i.DateClosed == null).ToList();
                     break;
-                    // Add more cases as needed
             }
 
-            // Order the incidents by date opened
-            var filteredIncidents = incidents.OrderBy(i => i.DateOpened).ToList();
-
+            //use the incident manager view model
             var incidentsViewModel = new IncidentManagerViewModel
             {
-                incidents = filteredIncidents,
-                DisplayFilter = filter ?? "All" // Default to "All" if filter is null
+                incidents = (List<Incidents>)incidents,
+                DisplayFilter = filter ?? "All"
             };
 
             return View(incidentsViewModel);
         }
 
+        //addincident using the view model
         public IActionResult AddIncident()
         {
             var viewModel = new AddEditIncidentViewModel
             {
-                Customers = Context.Customers.OrderBy(c => c.FirstName).ToList(),
-                Products = Context.Products.OrderBy(p => p.Name).ToList(),
-                Technicians = Context.Technicians.Where(t => t.TechnicianId != -1).OrderBy(t => t.Name).ToList(),
+                Customers = (List<Customers>)customerss.List(new QueryOptions<Customers>
+                {
+                    OrderBy = c => c.FirstName
+                }),
+                Products = (List<Products>)productss.List(new QueryOptions<Products>
+                {
+                    OrderBy = p => p.Name
+                }),
+                Technicians = (List<Technicians>)technicianss.List(new QueryOptions<Technicians>
+                {
+                    Where = t => t.TechnicianId != -1,
+                    OrderBy = t => t.Name
+                }),
                 CurrentIncident = new Incidents
                 {
                     DateOpened = DateTime.Now
@@ -68,25 +89,31 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult EditIncident(int id)
         {
-/*            ViewBag.Action = "Edit Incident";
-            ViewBag.Customers = Context.Customers.OrderBy(c => c.FirstName).ToList();
-            ViewBag.Products = Context.Products.OrderBy(p => p.Name).ToList();
-            ViewBag.Technicians = Context.Technicians.Where(t => t.TechnicianId != -1).OrderBy(t => t.Name).ToList();
-
-            var incident = Context.Incidents.Find(id);*/
             var viewModel = new AddEditIncidentViewModel
             {
-                Customers = Context.Customers.OrderBy(c => c.FirstName).ToList(),
-                Products = Context.Products.OrderBy(p => p.Name).ToList(),
-                Technicians = Context.Technicians.Where(t => t.TechnicianId != -1).OrderBy(t => t.Name).ToList(),
-                CurrentIncident = Context.Incidents.Find(id),
+                Customers = (List<Customers>)customerss.List(new QueryOptions<Customers>
+                {
+                    OrderBy = c => c.FirstName
+                }),
+                Products = (List<Products>)productss.List(new QueryOptions<Products>
+                {
+                    OrderBy = p => p.Name
+                }),
+                Technicians = (List<Technicians>)technicianss.List(new QueryOptions<Technicians>
+                {
+                    Where = t => t.TechnicianId != -1,
+                    OrderBy = t => t.Name
+                }),
+                CurrentIncident = incidentss.Get(id),
                 Operation = "Edit",
                 DisplayFilter = "All"
             };
+
             ViewBag.Customers = viewModel.Customers;
             ViewBag.Products = viewModel.Products;
             ViewBag.Technicians = viewModel.Technicians;
-            return View(viewModel);
+
+            return View("EditIncident", viewModel);
         }
 
         [HttpPost]
@@ -100,65 +127,53 @@ namespace SportsPro.Controllers
             {
                 if (viewModel.CurrentIncident.IncidentId == 0)
                 {
-                    Context.Incidents.Add(viewModel.CurrentIncident);
+                    incidentss.Insert(viewModel.CurrentIncident);
                 }
                 else
                 {
-                    Context.Incidents.Update(viewModel.CurrentIncident);
+                    incidentss.Update(viewModel.CurrentIncident);
                 }
-                Context.SaveChanges();
+                incidentss.Save();
                 return RedirectToAction("IncidentList", "Incidents", new { filter = viewModel.DisplayFilter });
             }
             else
             {
                 //Handle validation errors
                 //Repopulate dropdown lists and return the view with the view model
-                viewModel.Customers = Context.Customers.OrderBy(c => c.FirstName).ToList();
-                viewModel.Products = Context.Products.OrderBy(p => p.Name).ToList();
-                viewModel.Technicians = Context.Technicians.Where(t => t.TechnicianId != -1).OrderBy(t => t.Name).ToList();
+                viewModel.Customers = (List<Customers>)customerss.List(new QueryOptions<Customers>
+                {
+                    OrderBy = c => c.FirstName
+                });
+                viewModel.Products = (List<Products>)productss.List(new QueryOptions<Products>
+                {
+                    OrderBy = p => p.Name
+                });
+                viewModel.Technicians = (List<Technicians>)technicianss.List(new QueryOptions<Technicians>
+                {
+                    Where = t => t.TechnicianId != -1,
+                    OrderBy = t => t.Name
+                });
                 return View(viewModel);
             }
         }
-/*        {
-
-            if (ModelState.IsValid)
-            {
-                if (incident.IncidentId == 0)
-                {
-                    Context.Incidents.Add(incident);
-                }
-                else
-                {
-                    Context.Incidents.Update(incident);
-                }
-                Context.SaveChanges();
-                return RedirectToAction("IncidentList", "Incidents");
-            }
-            else
-            {
-                ViewBag.Action = (incident.IncidentId == 0) ? "Add Incident" : "Edit Incident";
-                ViewBag.Customers = Context.Customers.OrderBy(c => c.FirstName).ToList();
-                ViewBag.Products = Context.Products.OrderBy(p => p.Name).ToList();
-                ViewBag.Technicians = Context.Technicians.Where(t => t.TechnicianId != -1).OrderBy(t => t.Name).ToList();
-                return View(incident);
-            }
-        }*/
 
         [HttpGet]
         public IActionResult DeleteIncident(int id)
         {
-            var incident = Context.Incidents.Find(id);
-            ViewBag.Customers = Context.Customers.OrderBy(c => c.FirstName).ToList();
+            var incident = incidentss.Get(id);
+            ViewBag.Customers = customerss.List(new QueryOptions<Customers>
+            {
+                OrderBy = c => c.FirstName
+            });
             return View(incident);
         }
 
         [HttpPost]
         public IActionResult DeleteIncident(Incidents incident)
         {
-            Context.Incidents.Remove(incident);
-            ViewBag.Customers = Context.Customers.OrderBy(c => c.FirstName).ToList();
-            Context.SaveChanges();
-            return RedirectToAction("IncidentList", "Incidents", new { filter = "All"});
+            incidentss.Delete(incident);
+            incidentss.Save();
+            return RedirectToAction("IncidentList", "Incidents", new { filter = "All" });
         }
 
         public IActionResult Index()

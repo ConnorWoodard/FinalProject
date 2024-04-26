@@ -1,24 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SportsPro.Models;
+using SportsPro.Models.DataLayer;
+using SportsPro.Models.DomainModels;
 using System;
 using System.Diagnostics;
 
 namespace SportsPro.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
-        private SportsContext Context { get; set; }
+        private Repository<Products> productss { get; set; }
+
 
         public ProductsController(SportsContext ctx)
         {
-            Context = ctx;
+            productss = new Repository<Products>(ctx);
         }
 
         [Route("Products")]
         public IActionResult ProductList()
         {
-            var products = Context.Products.OrderBy(p => p.Name).ToList();
+            var products = productss.List(new QueryOptions<Products>
+            {
+                OrderBy = p => p.Name
+            });
             return View(products);
         }
 
@@ -41,26 +48,26 @@ namespace SportsPro.Controllers
         {
             ViewBag.Action = "Edit Product";
 
-            var product = Context.Products.Find(id);
+            var product = productss.Get(id);
             return View(product);
         }
 
         [HttpPost]
-        public IActionResult EditProduct2(Products product)
+        public IActionResult EditProduct(Products product)
         {
             if (ModelState.IsValid)
             {
                 if (product.ProductId == 0)
                 {
-                    Context.Products.Add(product);
+                    productss.Insert(product);
                     TempData["SuccessMessage"] = "Product added successfully!";
                 }
                 else
                 {
-                    Context.Products.Update(product);
+                    productss.Update(product);
                     TempData["SuccessMessage"] = "Product updated successfully!";
                 }
-                Context.SaveChanges();
+                productss.Save();
                 return RedirectToAction("ProductList", "Products");
             }
             else
@@ -73,15 +80,15 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult DeleteProduct(int id)
         {
-            var product = Context.Products.Find(id);
+            var product = productss.Get(id);
             return View(product);
         }
 
         [HttpPost]
         public IActionResult DeleteProduct(Products product)
         {
-            Context.Products.Remove(product);
-            Context.SaveChanges();
+            productss.Delete(product);
+            productss.Save();
             TempData["SuccessMessage"] = "Product deleted successfully!";
             return RedirectToAction("ProductList");
         }

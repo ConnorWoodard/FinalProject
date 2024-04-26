@@ -1,4 +1,5 @@
-﻿@model AddEditIncidentViewModel
+﻿@using SportsPro.Models.DomainModels
+@model SportsPro.Models.DomainModels.AddEditIncidentViewModel
 @{
     ViewData["Title"] = (Model.Operation == "Add") ? "Add Incident" : "Edit Incident";
 }
@@ -13,9 +14,12 @@
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="CurrentIncident.CustomerId" class="form-label">Customer</label>
-        <select asp-for="CurrentIncident.CustomerId" asp-items="new SelectList(ViewBag.Customers, nameof(Customers.CustomerId), nameof(Customers.FullName))" class="form-select">
+           <select asp-for="CurrentIncident.CustomerId" asp-items="new SelectList(ViewBag.Customers, nameof(Customers.CustomerId), nameof(Customers.FullName))" class="form-select">
             <option value="">Select a customer</option>
-        </select>
+            </select>
+@*         <select asp-for="CurrentIncident.CustomerId" asp-items="new SelectList(ViewBag.Customers, nameof(Customers.CustomerId), nameof(Customers.FullName))" class="form-select">
+            <option value="">Select a customer</option>
+        </select> *@
     </div>
 
     <div class="mb-3">
