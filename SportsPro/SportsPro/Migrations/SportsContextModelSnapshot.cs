@@ -459,7 +459,7 @@ namespace SportsPro.Migrations
                         {
                             IncidentId = 2,
                             CustomerId = 2,
-                            DateClosed = new DateTime(2024, 4, 26, 9, 38, 48, 783, DateTimeKind.Local).AddTicks(5040),
+                            DateClosed = new DateTime(2024, 4, 26, 10, 23, 11, 430, DateTimeKind.Local).AddTicks(8458),
                             DateOpened = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Received error code 123 when trying to install",
                             ProductId = 2,
@@ -470,7 +470,7 @@ namespace SportsPro.Migrations
                         {
                             IncidentId = 3,
                             CustomerId = 5,
-                            DateClosed = new DateTime(2024, 4, 26, 9, 38, 48, 783, DateTimeKind.Local).AddTicks(5049),
+                            DateClosed = new DateTime(2024, 4, 26, 10, 23, 11, 430, DateTimeKind.Local).AddTicks(8466),
                             DateOpened = new DateTime(2022, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Program fails with error code 510, unable to open database.",
                             ProductId = 8,
